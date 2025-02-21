@@ -1,0 +1,1 @@
+@include('paymentgateway::sections.tzsmmpay')

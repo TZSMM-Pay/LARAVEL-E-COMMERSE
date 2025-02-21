@@ -17,7 +17,7 @@ class AddonPaymentController extends Controller
 
     public function pay_with_tzsmmpay(Request $request, $tzsmmpay_credentials, $payable_amount, $after_success_url, $after_faild_url, $user)
     {
-        $calculate_payable_charge = $this->calculate_payable_charge($payable_amount, 'tzsmmpay');
+         $calculate_payable_charge = $this->calculate_payable_charge($payable_amount, 'tzsmmpay');
          $currency = strtoupper($calculate_payable_charge->currency_code);
          $apiKey = $tzsmmpay_credentials->tzsmmpay_api_key;
          $apiUrl = "https://tzsmmpay.com/api/payment/create";
@@ -32,7 +32,7 @@ class AddonPaymentController extends Controller
             'cancel_url'  => $after_faild_url,
             'callback_url'=> route('paymentgateway.tzsmmpay-payment-success'),
         ];
-        Session::put('after_success_gateway', 'TZSMM Pay');
+        
 
         $curl = curl_init();
         curl_setopt_array($curl, [
@@ -56,13 +56,19 @@ class AddonPaymentController extends Controller
         if ($err) {
             die(json_encode(["status" => false, "message" => "cURL Error: " . $err]));
         }
-    
+
         $result = json_decode($response, true);
     
         if (!isset($result['success']) || !$result['success']) {
             die(json_encode(["status" => false, "messages" => $result['messages'] ?? json_encode($result)]));
         }
-        
+        Session::put('after_success_url', $after_success_url);
+        Session::put('after_faild_url', $after_faild_url);
+        Session::put('payable_amount', $payable_amount);
+        Session::put('after_success_gateway', 'TZSMM Pay');
+        Session::put('paid_amount', $calculate_payable_charge->payable_with_charge);
+        Session::put('payable_currency', $currency);
+        Session::put('payable_with_charge', $calculate_payable_charge->payable_with_charge);        
         $payment_url = $result['payment_url'];
         return redirect($payment_url);
 

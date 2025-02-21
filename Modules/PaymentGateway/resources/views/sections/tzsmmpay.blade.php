@@ -12,7 +12,7 @@
             </div>
 
             <div class="form-group col-md-6">
-                <label for="">{{ __('tzsmmpay API Key') }}</label>
+                <label for="">{{ __('TZSMM Pay API Key') }}</label>
                 <input type="text" class="form-control" name="tzsmmpay_api_key"
                     value="{{ $payment_setting->tzsmmpay_api_key }}">
             </div>

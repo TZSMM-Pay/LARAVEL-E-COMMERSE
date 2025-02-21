@@ -29,8 +29,8 @@ class AddonPaymentController extends Controller
             'amount'      => number_format($calculate_payable_charge->payable_with_charge, 2, '.', ''),
             'currency'    => $currency ?? 'USD',
             'success_url' => $after_success_url,
-            'cancel_url'  => $after_faild_url,
-            'callback_url'=> route('paymentgateway.tzsmmpay-payment-success'),
+            'cancel_url'  => route('student.dashboard'),
+            'callback_url'=> $after_success_url,
         ];
         
 
